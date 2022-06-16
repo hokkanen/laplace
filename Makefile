@@ -12,7 +12,7 @@ else ifeq ($(HIP),CUDA)
 
 CXX = hipcc
 CXXDEFS = -DHAVE_HIP
-CXXFLAGS = -g -O3 -Xcompiler -fopt-info-loop --x=cu --extended-lambda
+CXXFLAGS = -g -O3 --x=cu --extended-lambda -gencode=arch=compute_70,code=sm_70
 # CXXFLAGS = -g -O3 -Xcompiler -fno-tree-vectorize -Xcompiler -fopt-info-loop --x=cu --extended-lambda
 EXE = bin.hip.cuda
 
@@ -58,7 +58,7 @@ else
 
 CXX = nvcc
 CXXDEFS = -DHAVE_CUDA
-CXXFLAGS = -g -O3 --x=cu --extended-lambda
+CXXFLAGS = -g -O3 --x=cu --extended-lambda -gencode=arch=compute_70,code=sm_70
 EXE = bin.cuda
 
 endif
