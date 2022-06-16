@@ -6,7 +6,7 @@ ifeq ($(HOST),1)
 
 CXX = g++
 CXXFLAGS = -g -O3
-EXE = bin.host
+EXE = laplace
 
 else ifeq ($(HIP),CUDA)
 
@@ -14,14 +14,14 @@ CXX = hipcc
 CXXDEFS = -DHAVE_HIP
 CXXFLAGS = -g -O3 --x=cu --extended-lambda -gencode=arch=compute_70,code=sm_70
 # CXXFLAGS = -g -O3 -Xcompiler -fno-tree-vectorize -Xcompiler -fopt-info-loop --x=cu --extended-lambda
-EXE = bin.hip.cuda
+EXE = laplace
 
 else ifeq ($(HIP),ROCM)
 
 CXX = hipcc
 CXXDEFS = -DHAVE_HIP
 CXXFLAGS = -g -O3
-EXE = bin.hip.rocm
+EXE = laplace
 
 else ifeq ($(KOKKOS),CUDA)
 
@@ -35,9 +35,9 @@ KOKKOS_ARCH = "Volta70"
 KOKKOS_CUDA_OPTIONS = "enable_lambda,force_uvm"
 include $(KOKKOS_PATH)/Makefile.kokkos
 # Other
-CXXDEFS = -DHAVE_KOKKOS
-EXE = bin.kokkos.cuda
 CLEAN = kokkos-clean
+CXXDEFS = -DHAVE_KOKKOS
+EXE = laplace
 
 else ifeq ($(KOKKOS),ROCM)
 
@@ -50,16 +50,16 @@ KOKKOS_DEVICES = "HIP"
 KOKKOS_ARCH = "VEGA908"
 include $(KOKKOS_PATH)/Makefile.kokkos
 # Other
-CXXDEFS = -DHAVE_KOKKOS
-EXE = bin.kokkos.rocm
 CLEAN = kokkos-clean
+CXXDEFS = -DHAVE_KOKKOS
+EXE = laplace
 
 else
 
 CXX = nvcc
 CXXDEFS = -DHAVE_CUDA
 CXXFLAGS = -g -O3 --x=cu --extended-lambda -gencode=arch=compute_70,code=sm_70
-EXE = bin.cuda
+EXE = laplace
 
 endif
 
@@ -100,7 +100,7 @@ $(EXE): $(OBJECTS) $(KOKKOS_LINK_DEPENDS)
 	$(CXX) $(LDFLAGS) $(OBJECTS) $(LIBS) $(KOKKOS_LDFLAGS) $(KOKKOS_LIBS) -o $(EXE)
 
 clean: $(CLEAN)
-	rm -f $(OBJECTS) *.cuda *.hip.* *.host *.kokkos.* Kokkos* libkokkos.a *.o
+	rm -f $(OBJECTS) $(EXE) *.o Kokkos* libkokkos.a
 
 # Compilation rules
 $(OBJ_PATH)%.o: $(SRC_PATH)%.cpp $(KOKKOS_CPP_DEPENDS)
