@@ -15,33 +15,33 @@
 
 namespace devices
 {
-  inline void init(int node_rank) {
+  inline static void init(int node_rank) {
    Kokkos::InitArguments args;
    args.device_id = node_rank;
    Kokkos::initialize(args);
   }
 
-  inline void finalize(int rank) {
+  inline static void finalize(int rank) {
     Kokkos::finalize();
     printf("Rank %d, Kokkos finalized.\n", rank);
   }
 
-  inline void* allocate(size_t bytes) {
+  inline static void* allocate(size_t bytes) {
     return Kokkos::kokkos_malloc(bytes);
   }
 
-  inline void free(void* ptr) {
+  inline static void free(void* ptr) {
     Kokkos::kokkos_free(ptr);
   }
 
-  inline void memcpyd2d(void *dest, void *src, size_t bytes){
+  inline static void memcpyd2d(void *dest, void *src, size_t bytes){
     Kokkos::View<char*> dest_view((char*)dest, bytes);
     Kokkos::View<char*> src_view((char*)src, bytes);
     Kokkos::deep_copy(dest_view, src_view);
   }
 
   template <typename Lambda>
-  inline void parallel_for(const int nx, const int ny, Lambda loop_body) {
+  inline static void parallel_for(const int nx, const int ny, Lambda loop_body) {
     using MDPolicyType_2D = typename Kokkos::Experimental::MDRangePolicy<Kokkos::Experimental::Rank<2> >;
     MDPolicyType_2D mdpolicy_2d({0, 0}, {nx, ny});
     Kokkos::parallel_for(mdpolicy_2d, loop_body);

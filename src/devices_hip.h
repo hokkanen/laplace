@@ -1,7 +1,7 @@
 #include <hip/hip_runtime.h>
 
 #define HIP_ERR(err) (hip_error(err, __FILE__, __LINE__))
-static inline void hip_error(hipError_t err, const char *file, int line) {
+inline static void hip_error(hipError_t err, const char *file, int line) {
 	if (err != hipSuccess) {
 		printf("\n\n%s in %s at line %d\n", hipGetErrorString(err), file, line);
 		exit(1);
@@ -12,27 +12,27 @@ static inline void hip_error(hipError_t err, const char *file, int line) {
 
 namespace devices
 {
-  __forceinline__ void init(int node_rank) {
+  __forceinline__ static void init(int node_rank) {
     int num_devices = 0;
     HIP_ERR(hipGetDeviceCount(&num_devices));
     HIP_ERR(hipSetDevice(node_rank % num_devices));
   }
 
-  __forceinline__ void finalize(int rank) {
+  __forceinline__ static void finalize(int rank) {
     printf("Rank %d, HIP finalized.\n", rank);
   }
 
-  __forceinline__ void* allocate(size_t bytes) {
+  __forceinline__ static void* allocate(size_t bytes) {
     void* ptr;
     HIP_ERR(hipMallocManaged(&ptr, bytes));
     return ptr;
   }
 
-  __forceinline__ void free(void* ptr) {
+  __forceinline__ static void free(void* ptr) {
     HIP_ERR(hipFree(ptr));
   }
 
-  __forceinline__ void memcpyd2d(void* dst, void* src, size_t bytes){
+  __forceinline__ static void memcpyd2d(void* dst, void* src, size_t bytes){
     HIP_ERR(hipMemcpy(dst, src, bytes, hipMemcpyDeviceToDevice));
   }
 
@@ -50,7 +50,7 @@ namespace devices
   }
 
   template <typename T>
-  __forceinline__ void parallel_for(const int nx, const int ny, T loop_body) {
+  __forceinline__ static void parallel_for(const int nx, const int ny, T loop_body) {
     const int blocksize = 64;
     const int gridsize = (nx * ny - 1 + blocksize) / blocksize;
     hipLaunchKernelGGL(hipKernel,
