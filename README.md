@@ -24,3 +24,17 @@ make HOST=1 MPI=1
 Note that when compiling to run sequentially on the CPU, it would at first appear that the 'gpu_slow' and 'gpu_fast' cases become equivalent to the 'cpu_slow' and 'cpu_fast'. However, this is actually only the case for the C example which uses preprocessor macros. In the C++ example, the 'parallel_for' loops that use lambda functions become less optimized by the compiler and are thus slightly slower. 
 
 On the other hand, the preprocessor macro approach used in the C example can obfuscate code from a debugger (the backtrace only points to the beginning of the loop, not to the exact line of the issue), making debugging slightly less productive.
+
+The executable can be run with 4 MPI processes using a sbatch script: 
+
+```
+#!/bin/bash -x
+#SBATCH --account=xxx
+#SBATCH --partition=gputest
+#SBATCH --nodes=1
+#SBATCH --ntasks=4
+#SBATCH --gres=gpu:v100:4
+#SBATCH --time=00:15:00
+
+srun laplace 4
+```
