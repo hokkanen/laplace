@@ -62,7 +62,8 @@ int main(int argc, char *argv []){
     case cpu_slow: 
 
       t0 = clock(); /* Begin timer */
-
+      
+      #pragma no interchange
       for (int iter = 0; iter < niters; iter++)
         for (int j = 1; j < ny - 1; j++)
           for (int i = 1; i < nx - 1; i++)
@@ -78,6 +79,7 @@ int main(int argc, char *argv []){
 
       t0 = clock(); /* Begin timer */
       
+      #pragma no interchange
       for (int iter = 0; iter < niters; iter++)
         for (int i = 1; i < nx - 1; i++)
           for (int j = 1; j < ny - 1; j++)
