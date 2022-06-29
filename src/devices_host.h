@@ -28,6 +28,7 @@ namespace devices
 
   template <typename Lambda>
   inline static void parallel_for(const int nx, const int ny, Lambda loop_body) {
+    #pragma omp parallel for collapse(2)
     for(int j = 0; j < ny; j++){
       for(int i = 0; i < nx; i++){
         loop_body(i, j);
