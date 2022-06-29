@@ -63,6 +63,7 @@ int main(int argc, char *argv []){
 
       t0 = std::chrono::steady_clock::now(); /* Begin timer */
 
+      #pragma no interchange
       for (int iter = 0; iter < niters; iter++)
         for (int j = 1; j < ny - 1; j++)
           for (int i = 1; i < nx - 1; i++)
@@ -78,6 +79,7 @@ int main(int argc, char *argv []){
 
       t0 = std::chrono::steady_clock::now(); /* Begin timer */
       
+      #pragma no interchange
       for (int iter = 0; iter < niters; iter++)
         for (int i = 1; i < nx - 1; i++)
           for (int j = 1; j < ny - 1; j++)
