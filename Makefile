@@ -5,9 +5,10 @@ default: build
 ifeq ($(HOST),1)
 
 CXX = gcc
-CXXFLAGS = -g -O3
+CXXFLAGS = -g -O3 -fopenmp
 FILETYPE = .c
 EXE = laplace
+LIBS = -fopenmp
 
 else ifeq ($(HIP),CUDA)
 
@@ -75,7 +76,7 @@ ifeq ($(MPI),1)
 MPICXX = mpicxx
 MPICXXENV = OMPI_CXXFLAGS='' OMPI_CXX='$(CXX) -DHAVE_MPI $(CXXDEFS) $(CXXFLAGS)'
 LDFLAGS = -L/appl/spack/install-tree/gcc-9.1.0/openmpi-4.1.1-vonyow/lib
-LIBS = -lmpi
+LIBS += -lmpi
 
 else
 

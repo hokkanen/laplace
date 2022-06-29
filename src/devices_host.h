@@ -24,8 +24,11 @@ inline static void devices_memcpyd2d(void* dst, void* src, size_t bytes){
   memcpy(dst, src, bytes);
 }
 
+#define PRAGMA(args) _Pragma( #args )
+
 #define devices_parallel_for(n1, n2, inc1, inc2, i1, i2, loop_body) \
 {                                                                   \
+  PRAGMA(omp parallel for collapse(2) private(inc1, inc2))          \
   for(inc2 = i2; inc2 < i2 + n2; inc2++){                           \
     for(inc1 = i1; inc1 < i1 + n1; inc1++){                         \
       loop_body;                                                    \
