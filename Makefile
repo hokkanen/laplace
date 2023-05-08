@@ -52,7 +52,8 @@ KOKKOS_PATH = $(shell pwd)/kokkos
 CXX = hipcc
 CXXFLAGS = -g -O3
 KOKKOS_DEVICES = "HIP"
-KOKKOS_ARCH = "VEGA908"
+KOKKOS_ARCH = "VEGA90A"
+KOKKOS_HIP_OPTIONS = "enable_lambda,force_uvm"
 include $(KOKKOS_PATH)/Makefile.kokkos
 # Other
 CLEAN = kokkos-clean
